@@ -1,4 +1,4 @@
-package com.acc.hibernate.repository;
+package com.acc.hibernate.repository.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;

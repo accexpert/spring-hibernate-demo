@@ -43,9 +43,9 @@ public class ApplicationConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(ConstantsUtils.MYSQL_DRIVER_CLASS_NAME);
-        dataSource.setUrl("jdbc:mysql://"+env.getProperty(DB_URL)+":"+DB_PORT+"/"+DB_NAME);
-        dataSource.setUsername(DB_USER);
-        dataSource.setPassword(DB_PASS);
+        dataSource.setUrl("jdbc:mysql://"+env.getProperty(DB_URL)+":"+env.getProperty(DB_PORT)+"/"+env.getProperty(DB_NAME));
+        dataSource.setUsername(env.getProperty(DB_USER));
+        dataSource.setPassword(env.getProperty(DB_PASS));
         return dataSource;
     }
 
