@@ -1,9 +1,8 @@
 package com.acc.hibernate.demos;
 
 import com.acc.hibernate.repository.entities.UsersEntity;
-import com.acc.hibernate.repository.handlers.UsersHandlerDemo1;
+import com.acc.hibernate.repository.handlers.DbHandlerDemo1;
 import org.apache.log4j.Logger;
-import org.hibernate.PersistentObjectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +22,7 @@ import javax.persistence.PersistenceException;
 public class Demo1 implements IDemos {
     private static final Logger LOGGER = Logger.getLogger(Demo1.class);
     @Autowired
-    private UsersHandlerDemo1 usersHandler;
+    private DbHandlerDemo1 dbHandler;
 
     public Demo1() {
         LOGGER.info(this.getClass().getSimpleName()+" created.");
@@ -31,21 +30,23 @@ public class Demo1 implements IDemos {
 
     public void run() {
         LOGGER.info("Demo1 run called");
-        Integer id = usersHandler.saveUserRecord();
-        UsersEntity entity = usersHandler.getRecord(UsersEntity.class, id);
-        usersHandler.updateUserRecord(id);
+        Integer id = dbHandler.saveUserRecord();
+        UsersEntity entity = dbHandler.getRecord(UsersEntity.class, id);
+        UsersEntity entity1 = dbHandler.getRecord(UsersEntity.class, id);
+        dbHandler.updateUserRecord(id);
+        UsersEntity entity2 = dbHandler.getRecord(UsersEntity.class, id);
         try {
             //trying to save an detached entity will throw an error
-            usersHandler.updateUserRecordDetachedEntityWithPersist(entity);
+            dbHandler.updateUserRecordDetachedEntityWithPersist(entity);
         } catch (PersistenceException ex) {
             LOGGER.error(ex.getMessage());
         }
-        usersHandler.updateUserRecordDetachedEntityWithMerge(entity);
+        dbHandler.updateUserRecordDetachedEntityWithMerge(entity);
         try {
-            usersHandler.deleteUserRecordDetachedEntity(entity);
+            dbHandler.deleteUserRecordDetachedEntity(entity);
         } catch (IllegalArgumentException ex) {
             LOGGER.error(ex.getMessage());
         }
-        usersHandler.deleteUserRecord(id);
+        dbHandler.deleteUserRecord(id);
     }
 }

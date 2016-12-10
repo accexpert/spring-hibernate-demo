@@ -26,6 +26,10 @@
         <appender-ref ref="consoleAppenderHibernate"/>
     </logger>
 
+    <logger name="org.springframework.transaction" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="consoleAppenderHibernate"/>
+    </logger>
     <root>
         <level value="INFO"/>
         <appender-ref ref="consoleAppenderApp"/>

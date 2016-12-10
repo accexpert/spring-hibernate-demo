@@ -15,7 +15,7 @@ import static com.acc.hibernate.utils.ProfilesUtils.*;
 public class HibernateDemo {
     private static final Logger LOGGER = Logger.getLogger(HibernateDemo.class);
     private static final String DEMO_BEAN_PREFIX = "demo";
-    private static final String DEMO_NUMBER = "1";
+    private static final String DEMO_NUMBER = "2";
 
     public static void main(String[] args) {
         new HibernateDemo().start();
@@ -29,14 +29,17 @@ public class HibernateDemo {
                     ctx.getEnvironment().setActiveProfiles(PROFILE_HIBERNATE_MYSQL, PROFILE_HIBERNATE_USE_CACHE_LEVEL_2, PROFILE_HIBERNATE_USE_QUERY_CACHE);
                     ctx.register(ApplicationConfig.class);
                     ctx.refresh();
-                    ctx.getBean(DEMO_BEAN_PREFIX+DEMO_NUMBER, IDemos.class).run();
                     break;
                 case "2":
-
+                    ctx.getEnvironment().setActiveProfiles(PROFILE_HIBERNATE_MYSQL, PROFILE_HIBERNATE_USE_CACHE_LEVEL_2, PROFILE_HIBERNATE_USE_QUERY_CACHE);
+                    ctx.register(ApplicationConfig.class);
+                    ctx.refresh();
                     break;
                 default:
                     LOGGER.error("Please select a demo number");
+                    return;
             }
+            ctx.getBean(DEMO_BEAN_PREFIX+DEMO_NUMBER, IDemos.class).run();
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
         }

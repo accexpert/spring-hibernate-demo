@@ -13,6 +13,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.SharedCacheMode;
 import javax.sql.DataSource;
 
 import java.util.Properties;
@@ -56,20 +57,19 @@ public class ApplicationConfig {
         props.put("hibernate.connection.isolation","2");
         props.put("hibernate.connection.release_mode","on_close");
 
-        //caching
-        props.put("hibernate.cache.use_second_level_cache","true");
-        props.put("hibernate.cache.use_query_cache","true");
-
         props.put("hibernate.order_updates","false");
         props.put("hibernate.order_inserts","false");
         props.put("hibernate.cache.use_structured_entries","true");
         props.put("hibernate.jdbc.batch_size","50");
 
         //cache level 2
+        props.put("hibernate.cache.use_second_level_cache","true");
+        props.put("hibernate.cache.use_query_cache","true");
         props.put("hibernate.cache.provider_class","org.hibernate.cache.EhCacheProvider");
         props.put("hibernate.cache.region.factory_class","org.hibernate.cache.ehcache.EhCacheRegionFactory");
 
         props.put("hibernate.temp.use_jdbc_metadata_defaults","false");
+        props.put("hibernate.current_session_context_class","jta");
 
         //debug
         props.put("hibernate.show_sql",env.getProperty(HIBERNATE_DEBUG_MODE));
@@ -79,6 +79,23 @@ public class ApplicationConfig {
         return props;
     }
 
+    /**
+     * <p>
+     *
+     *     SharedCacheMode explained:
+     *     SharedCacheMode.ALL - means every entity will be cached in L2 no matter if the Cacheable annotation is set or not
+     *     SharedCacheMode.ENABLE_SELECTIVE - entity will be cached in L2 only if Cacheable annotation is set to true. All other entities will not be cached.
+     *     SharedCacheMode.DISABLE_SELECTIVE - Caching is enabled for all entities except those for which Cacheable(false) is specified. Entities for which
+     *                                         Cacheable(false) is specified are not cached.
+     *     SharedCacheMode.NONE - Caching is disabled for the persistence unit
+
+     * </p>
+     * @param dataSource
+     * @param hibernateJpaDialect
+     * @param hibernateProperties
+     * @param hibernateJpaVendorAdapterMysql
+     * @return
+     */
     @Bean
     @Profile(ProfilesUtils.PROFILE_HIBERNATE_MYSQL)
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(DataSource dataSource, HibernateJpaDialect hibernateJpaDialect, Properties hibernateProperties,
@@ -90,6 +107,7 @@ public class ApplicationConfig {
         entityManagerFactoryBean.setJpaProperties(hibernateProperties);
         entityManagerFactoryBean.setJpaVendorAdapter(hibernateJpaVendorAdapterMysql);
         entityManagerFactoryBean.setJpaDialect(hibernateJpaDialect);
+        entityManagerFactoryBean.setSharedCacheMode(SharedCacheMode.ENABLE_SELECTIVE);
         return entityManagerFactoryBean;
     }
 
@@ -112,10 +130,6 @@ public class ApplicationConfig {
         return hibernateJpaVendorAdapter;
     }
     //------------- END MYCROSOFT SQL SECTION -------------
-
-    public PersistenceAnnotationBeanPostProcessor persistenceAnnotationBeanPostProcessor() {
-        return new PersistenceAnnotationBeanPostProcessor();
-    }
 
     @Bean
     public HibernateJpaDialect hibernateJpaDialect() {

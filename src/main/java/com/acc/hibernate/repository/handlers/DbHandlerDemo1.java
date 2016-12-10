@@ -19,12 +19,12 @@ import javax.persistence.PersistenceContext;
  * Email: accexpert@gmail.com
  */
 @Component
-public class UsersHandlerDemo1 {
-    private static final Logger LOGGER = Logger.getLogger(UsersHandlerDemo1.class);
+public class DbHandlerDemo1 {
+    private static final Logger LOGGER = Logger.getLogger(DbHandlerDemo1.class);
     @PersistenceContext(unitName = ApplicationConfig.PERSISTENCE_UNIT_NAME)
     private EntityManager em;
 
-    public UsersHandlerDemo1() {
+    public DbHandlerDemo1() {
         LOGGER.info(this.getClass().getSimpleName()+" created");
     }
 
@@ -41,6 +41,8 @@ public class UsersHandlerDemo1 {
      *          <li>insert a new record in the database (is more efficient then merge() method)</li>
      *          <li>it doesn't duplicate the original object (@see updateUserRecordDetachedEntityWithMerge())</li>
      *      </ul>
+     *      IMPORTANT: If the key is generated database side then after persist() the entity is not stored into cache L2.
+     *      It will be stored only after first find()
      * </p>
      * @return
      */
@@ -66,6 +68,7 @@ public class UsersHandlerDemo1 {
      * @param <T>
      * @return
      */
+//    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class, readOnly = true)
     public <T> T getRecord(Class<T> cls, Integer id) {
         LOGGER.info("Start retrieving with find() user record with id: "+id+"; Class: "+cls.getSimpleName());
         T val = em.find(cls, id);
