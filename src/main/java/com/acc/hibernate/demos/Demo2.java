@@ -27,7 +27,7 @@ public class Demo2 implements IDemos {
     }
 
     public void run() {
-        LOGGER.info("Demo1 run called");
+        LOGGER.info("Demo2 run called");
         dbHandler.saveMultipleRecordsInTheSameTransaction();
         try {
             dbHandler.saveRecordFirstNewTransaction();
@@ -39,6 +39,6 @@ public class Demo2 implements IDemos {
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());
         }
-        LOGGER.info("End demo1");
+        LOGGER.info("End demo2");
     }
 }

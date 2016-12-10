@@ -27,18 +27,22 @@ public class HibernateDemo {
             switch(DEMO_NUMBER) {
                 case "1":
                     ctx.getEnvironment().setActiveProfiles(PROFILE_HIBERNATE_MYSQL, PROFILE_HIBERNATE_USE_CACHE_LEVEL_2, PROFILE_HIBERNATE_USE_QUERY_CACHE);
-                    ctx.register(ApplicationConfig.class);
-                    ctx.refresh();
                     break;
                 case "2":
                     ctx.getEnvironment().setActiveProfiles(PROFILE_HIBERNATE_MYSQL, PROFILE_HIBERNATE_USE_CACHE_LEVEL_2, PROFILE_HIBERNATE_USE_QUERY_CACHE);
-                    ctx.register(ApplicationConfig.class);
-                    ctx.refresh();
+                    break;
+                case "3":
+                    ctx.getEnvironment().setActiveProfiles(PROFILE_HIBERNATE_MYSQL, PROFILE_HIBERNATE_USE_CACHE_LEVEL_2, PROFILE_HIBERNATE_USE_QUERY_CACHE);
+                    break;
+                case "4":
+                    ctx.getEnvironment().setActiveProfiles(PROFILE_HIBERNATE_MYSQL, PROFILE_HIBERNATE_USE_CACHE_LEVEL_2, PROFILE_HIBERNATE_USE_QUERY_CACHE);
                     break;
                 default:
                     LOGGER.error("Please select a demo number");
                     return;
             }
+            ctx.register(ApplicationConfig.class);
+            ctx.refresh();
             ctx.getBean(DEMO_BEAN_PREFIX+DEMO_NUMBER, IDemos.class).run();
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);

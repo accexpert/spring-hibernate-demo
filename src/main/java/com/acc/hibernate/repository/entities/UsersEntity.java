@@ -1,8 +1,6 @@
 package com.acc.hibernate.repository.entities;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
